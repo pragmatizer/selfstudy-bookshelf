@@ -9,6 +9,7 @@ import lombok.ToString;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import java.util.Set;
 
@@ -23,7 +24,9 @@ public class Book extends AbstractPersistable<Long> implements AggregateRoot {
 
     private String subtitle;
 
-    private Set<Author> authors;
+    @ElementCollection
+    private Set<Long> authorIds;
+    private transient Set<Author> authors;
 }
 
 
