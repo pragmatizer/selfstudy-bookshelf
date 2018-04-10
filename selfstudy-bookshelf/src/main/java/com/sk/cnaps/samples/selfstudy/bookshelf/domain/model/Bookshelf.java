@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Transient;
 
 import com.sk.cnaps.domain.model.AbstractEntity;
 import com.sk.cnaps.domain.model.AggregateRoot;
@@ -23,8 +24,9 @@ import lombok.ToString;
 @Entity
 public class Bookshelf extends AbstractEntity implements AggregateRoot {
 	@ElementCollection(fetch=FetchType.EAGER)
-	private Set<Long> bookIds = new HashSet<Long>();
-	private transient Set<Book> books;
+	private Set<Long> bookIds = new HashSet<>();
+	@Transient
+	private Set<Book> books = new HashSet<>();
 	
 	@Column(nullable=false)
 	private String owner;

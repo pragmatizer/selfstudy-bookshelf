@@ -3,8 +3,6 @@ package com.sk.cnaps.samples.selfstudy.bookshelf.domain.model;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.AttributeConverter;
-
 import com.sk.cnaps.domain.model.ValueObject;
 import com.sk.cnaps.domain.util.JsonUtil;
 
@@ -18,7 +16,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 public class Contents implements ValueObject<Contents> {
-	private Set<String> chapters = new HashSet<String>();
+	private Set<String> chapters = new HashSet<>();
 
 	@Override
 	public Contents convertToEntityAttribute(String dbData) {

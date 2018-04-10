@@ -12,7 +12,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -29,7 +28,6 @@ import com.sk.cnaps.samples.selfstudy.bookshelf.domain.repository.AuthorReposito
 import com.sk.cnaps.samples.selfstudy.bookshelf.domain.repository.BookRepository;
 import com.sk.cnaps.samples.selfstudy.bookshelf.domain.repository.BookshelfRepository;
 import com.sk.cnaps.samples.selfstudy.bookshelf.domain.service.BookshelfService;
-import com.sk.cnaps.samples.selfstudy.bookshelf.domain.service.logic.BookshelfLogic;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

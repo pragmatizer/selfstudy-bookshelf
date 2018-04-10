@@ -3,8 +3,6 @@ package com.sk.cnaps.samples.selfstudy.bookshelf.domain.service;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.sk.cnaps.samples.selfstudy.bookshelf.domain.model.Author;
 import com.sk.cnaps.samples.selfstudy.bookshelf.domain.model.Book;
 import com.sk.cnaps.samples.selfstudy.bookshelf.domain.model.Bookshelf;
@@ -21,8 +18,6 @@ import com.sk.cnaps.samples.selfstudy.bookshelf.domain.model.VersionType;
 import com.sk.cnaps.samples.selfstudy.bookshelf.domain.repository.AuthorRepository;
 import com.sk.cnaps.samples.selfstudy.bookshelf.domain.repository.BookRepository;
 import com.sk.cnaps.samples.selfstudy.bookshelf.domain.repository.BookshelfRepository;
-
-import antlr.collections.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

@@ -2,15 +2,10 @@ package com.sk.cnaps.samples.selfstudy.bookshelf.domain.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import com.sk.cnaps.samples.selfstudy.bookshelf.domain.model.Book;
 import com.sk.cnaps.samples.selfstudy.bookshelf.domain.model.VersionType;
-import com.sk.cnaps.samples.selfstudy.bookshelf.domain.repository.BookRepository;
 
 //@RunWith(SpringRunner.class)
 //@SpringBootTest

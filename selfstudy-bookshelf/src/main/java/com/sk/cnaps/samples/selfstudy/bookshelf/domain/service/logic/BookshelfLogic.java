@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 
 import com.sk.cnaps.samples.selfstudy.bookshelf.domain.model.Book;
 import com.sk.cnaps.samples.selfstudy.bookshelf.domain.model.Bookshelf;
-import com.sk.cnaps.samples.selfstudy.bookshelf.domain.model.Contents;
 import com.sk.cnaps.samples.selfstudy.bookshelf.domain.repository.AuthorRepository;
 import com.sk.cnaps.samples.selfstudy.bookshelf.domain.repository.BookRepository;
 import com.sk.cnaps.samples.selfstudy.bookshelf.domain.repository.BookshelfRepository;

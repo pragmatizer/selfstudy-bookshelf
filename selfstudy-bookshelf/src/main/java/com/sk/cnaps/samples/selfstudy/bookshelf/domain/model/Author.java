@@ -3,8 +3,6 @@ package com.sk.cnaps.samples.selfstudy.bookshelf.domain.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
-import org.springframework.data.jpa.domain.AbstractPersistable;
-
 import com.sk.cnaps.domain.model.AbstractEntity;
 import com.sk.cnaps.domain.model.AggregateRoot;
 

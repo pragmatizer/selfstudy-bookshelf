@@ -3,7 +3,6 @@ package com.sk.cnaps.samples.selfstudy.bookshelf.domain.model;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.ElementCollection;
@@ -11,7 +10,6 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.Lob;
 import javax.persistence.Transient;
 
 import com.sk.cnaps.domain.model.AbstractEntity;
@@ -42,8 +40,9 @@ public class Book extends AbstractEntity implements AggregateRoot {
     private VersionType versionType;
 
     @ElementCollection(fetch=FetchType.EAGER)
-    private Set<Long> authorIds = new HashSet<Long>();
-    private transient Set<Author> authors;
+    private Set<Long> authorIds = new HashSet<>();
+    @Transient
+    private Set<Author> authors = new HashSet<>();
     
     public Book(String title, String subtitle, VersionType versionType) {
     	this.title = title;

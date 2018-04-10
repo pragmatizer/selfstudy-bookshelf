@@ -24,18 +24,18 @@ public class BookshelfRestController {
 	@GetMapping("v1/bookshelf-service/books:withAuthors/{id}")
 	public ResponseEntity<Book> findBookWithAuthorsById(@PathVariable Long id) {
 		try {
-			return new ResponseEntity<Book>(logic.findBookWithAuthorsById(id), HttpStatus.OK);
+			return new ResponseEntity<>(logic.findBookWithAuthorsById(id), HttpStatus.OK);
 		} catch(NullPointerException e) {
-			return new ResponseEntity<Book>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} 
 	}
 
 	@GetMapping("v1/bookshelf-serivce/bookshelves:withBooks/{id}")
 	public ResponseEntity<Bookshelf> findBookshelfWithBooksById(@PathVariable Long id) {
 		try {
-			return new ResponseEntity<Bookshelf>(logic.findBookshelfWithBooksById(id), HttpStatus.OK);
+			return new ResponseEntity<>(logic.findBookshelfWithBooksById(id), HttpStatus.OK);
 		} catch(NullPointerException e) {
-			return new ResponseEntity<Bookshelf>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
 
