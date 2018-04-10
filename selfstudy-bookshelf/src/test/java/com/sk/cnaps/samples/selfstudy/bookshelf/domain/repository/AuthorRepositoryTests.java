@@ -19,10 +19,12 @@ public class AuthorRepositoryTests {
 	
 	@Test
 	public void test() {
+		
 		repository.save(new Author("박지원"));
 		repository.save(new Author("프란시스 베이컨"));
 		repository.save(new Author("찰스 다윈"));
 		repository.save(new Author("정성권", "klimtver@gmail.com", ""));
+		
 		
 		Iterable<Author> authors = repository.findAll();
 		

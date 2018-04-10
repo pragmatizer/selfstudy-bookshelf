@@ -66,13 +66,13 @@ public class BookshelfSerivceTests {
 		Bookshelf bookshelf = new Bookshelf("My bookshelf");
 		bookshelf.addBookId(books.get(0).getId());
 		bookshelf.addBookId(books.get(1).getId());
-		bookshelf.addBookId(books.get(4).getId());
+		bookshelf.addBookId(books.get(3).getId());
 		
 		bookshelfRepository.save(bookshelf);
 		
 		Bookshelf bookshelfWithBooks = bookshelfService.findBookshelfWithBooksById(bookshelf.getId());
 				
-		assertThat(bookshelfWithBooks.getBooks()).isNotEmpty().hasSize(2);
+		assertThat(bookshelfWithBooks.getBooks()).isNotEmpty().hasSize(3);
 		
 	}
 }
