@@ -11,13 +11,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.sk.cnaps.samples.selfstudy.bookshelf.domain.model.Author;
 import com.sk.cnaps.samples.selfstudy.bookshelf.domain.repository.AuthorRepository;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+//@RunWith(SpringRunner.class)
+//@SpringBootTest
 public class AuthorRepositoryTests {
 	@Autowired
 	private AuthorRepository repository;
 	
-	@Test
+	//@Test
 	public void test() {
 		
 		repository.save(new Author("박지원"));

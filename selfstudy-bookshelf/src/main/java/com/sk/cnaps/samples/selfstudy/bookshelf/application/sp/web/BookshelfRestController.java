@@ -21,17 +21,16 @@ public class BookshelfRestController {
 	@Autowired
 	private BookshelfLogic logic;
 
-	@GetMapping("books:withAuthors/{id}")
+	@GetMapping("v1/bookshelf-service/books:withAuthors/{id}")
 	public ResponseEntity<Book> findBookWithAuthorsById(@PathVariable Long id) {
 		try {
-			System.out.println("TEST");
 			return new ResponseEntity<Book>(logic.findBookWithAuthorsById(id), HttpStatus.OK);
 		} catch(NullPointerException e) {
 			return new ResponseEntity<Book>(HttpStatus.NOT_FOUND);
 		} 
 	}
 
-	@GetMapping("bookshelves:withBooks/{id}")
+	@GetMapping("v1/bookshelf-serivce/bookshelves:withBooks/{id}")
 	public ResponseEntity<Bookshelf> findBookshelfWithBooksById(@PathVariable Long id) {
 		try {
 			return new ResponseEntity<Bookshelf>(logic.findBookshelfWithBooksById(id), HttpStatus.OK);

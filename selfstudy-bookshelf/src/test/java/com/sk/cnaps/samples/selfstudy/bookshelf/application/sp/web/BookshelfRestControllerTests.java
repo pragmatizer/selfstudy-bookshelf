@@ -1,19 +1,26 @@
-package com.sk.cnaps.samples.selfstudy.bookshelf.domain.service;
+package com.sk.cnaps.samples.selfstudy.bookshelf.application.sp.web;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import com.sk.cnaps.domain.util.JsonUtil;
 import com.sk.cnaps.samples.selfstudy.bookshelf.domain.model.Author;
 import com.sk.cnaps.samples.selfstudy.bookshelf.domain.model.Book;
 import com.sk.cnaps.samples.selfstudy.bookshelf.domain.model.Bookshelf;
@@ -21,12 +28,22 @@ import com.sk.cnaps.samples.selfstudy.bookshelf.domain.model.VersionType;
 import com.sk.cnaps.samples.selfstudy.bookshelf.domain.repository.AuthorRepository;
 import com.sk.cnaps.samples.selfstudy.bookshelf.domain.repository.BookRepository;
 import com.sk.cnaps.samples.selfstudy.bookshelf.domain.repository.BookshelfRepository;
-
-import antlr.collections.List;
+import com.sk.cnaps.samples.selfstudy.bookshelf.domain.service.BookshelfService;
+import com.sk.cnaps.samples.selfstudy.bookshelf.domain.service.logic.BookshelfLogic;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class BookshelfSerivceTests {
+@AutoConfigureMockMvc
+public class BookshelfRestControllerTests {
+	@Autowired
+	private MockMvc mockMvc;
+	
+	@Autowired
+	private BookshelfRestController controller;
+	
+	@Autowired
+	private BookshelfService service;
+	
 	@Autowired
 	private AuthorRepository authorRepository;
 	
@@ -36,11 +53,10 @@ public class BookshelfSerivceTests {
 	@Autowired
 	private BookshelfRepository bookshelfRepository;
 	
-	@Autowired
-	private BookshelfService bookshelfService;
-	
-	@Test
-	public void test() {	
+	@Before
+	public void setUp() throws Exception {
+		mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+		
 		authorRepository.save(new Author("박지원"));
 		authorRepository.save(new Author("프란시스 베이컨"));
 		authorRepository.save(new Author("찰스 다윈"));
@@ -67,10 +83,32 @@ public class BookshelfSerivceTests {
 		bookshelf.addBookId(books.get(3).getId());
 		
 		bookshelfRepository.save(bookshelf);
-		
-		Bookshelf bookshelfWithBooks = bookshelfService.findBookshelfWithBooksById(bookshelf.getId());
-				
-		assertThat(bookshelfWithBooks.getBooks()).isNotEmpty().hasSize(3);
-		
+
 	}
+	
+	@Test
+	public void testFindBookWithAuthorsById() throws Exception {
+		Long authorId = 1L;
+			
+		Book book = service.findBookWithAuthorsById(authorId);
+		
+		mockMvc.perform(get("/v1/bookshelf-service/books:withAuthors/" + authorId))
+		       .andExpect(status().isOk())
+		       .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+		       .andExpect(content().string(equalTo(JsonUtil.toJsonStr(book))));
+	}
+
+	@Test
+	public void testFindBookshelfWithBooksById() throws Exception {
+		Long bookshelfId = 2L;
+		
+		Bookshelf bookshelf = service.findBookshelfWithBooksById(bookshelfId);
+		
+		System.out.println("*********************************************************************");
+		System.out.println(bookshelf.toString());
+	
+		mockMvc.perform(get("/v1/bookshelf-service/bookshelves:withBooks/" + bookshelfId))
+	           .andExpect(status().isNotFound());
+	}
+	
 }
