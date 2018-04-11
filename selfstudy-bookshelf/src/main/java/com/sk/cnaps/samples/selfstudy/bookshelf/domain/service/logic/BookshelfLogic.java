@@ -27,7 +27,8 @@ public class BookshelfLogic implements BookshelfService {
 		if(book == null) {
 			throw new NullPointerException();
 		}
-		book.setAuthors(authorRepository.findByIdIn(book.getAuthorIds()));
+		
+		book.getAuthorsAggregate().setValues(authorRepository);
 		return book;
 	}
 
@@ -37,7 +38,8 @@ public class BookshelfLogic implements BookshelfService {
 		if(bookshelf == null) {
 			throw new NullPointerException();
 		}
-		bookshelf.setBooks(bookRepository.findByIdIn(bookshelf.getBookIds()));
+		
+		bookshelf.getBooksAggregate().setValues(bookRepository);
 		return bookshelf;
 	}	
 	

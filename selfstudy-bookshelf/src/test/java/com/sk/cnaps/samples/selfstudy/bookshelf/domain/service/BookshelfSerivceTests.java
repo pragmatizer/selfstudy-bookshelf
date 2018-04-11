@@ -49,23 +49,23 @@ public class BookshelfSerivceTests {
 		ArrayList<Author> authors = Lists.newArrayList(authorRepository.findAll());
 		ArrayList<Book> books = Lists.newArrayList(bookRepository.findAll());
 		
-		books.get(0).addAuthorId(authors.get(0).getId());
-		books.get(1).addAuthorId(authors.get(1).getId());
-		books.get(2).addAuthorId(authors.get(2).getId());
-		books.get(3).addAuthorId(authors.get(3).getId());
+		books.get(0).getAuthorsAggregate().add(authors.get(0).getId());
+		books.get(1).getAuthorsAggregate().add(authors.get(1).getId());
+		books.get(2).getAuthorsAggregate().add(authors.get(2).getId());
+		books.get(3).getAuthorsAggregate().add(authors.get(3).getId());
 				
 		bookRepository.save(books);
 		
 		Bookshelf bookshelf = new Bookshelf("My bookshelf");
-		bookshelf.addBookId(books.get(0).getId());
-		bookshelf.addBookId(books.get(1).getId());
-		bookshelf.addBookId(books.get(3).getId());
+		bookshelf.getBooksAggregate().add(books.get(0).getId());
+		bookshelf.getBooksAggregate().add(books.get(1).getId());
+		bookshelf.getBooksAggregate().add(books.get(3).getId());
 		
 		bookshelfRepository.save(bookshelf);
 		
 		Bookshelf bookshelfWithBooks = bookshelfService.findBookshelfWithBooksById(bookshelf.getId());
 				
-		assertThat(bookshelfWithBooks.getBooks()).isNotEmpty().hasSize(3);
+		assertThat(bookshelfWithBooks.getBooksAggregate().getValues()).isNotEmpty().hasSize(3);
 		
 	}
 }

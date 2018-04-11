@@ -1,15 +1,12 @@
 package com.sk.cnaps.samples.selfstudy.bookshelf.domain.model;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Transient;
 
 import com.sk.cnaps.domain.model.AbstractEntity;
+import com.sk.cnaps.domain.model.AggregateProxy;
+import com.sk.cnaps.domain.model.AggregateRelationType;
 import com.sk.cnaps.domain.model.AggregateRoot;
 
 import lombok.Getter;
@@ -23,24 +20,15 @@ import lombok.ToString;
 @NoArgsConstructor
 @Entity
 public class Bookshelf extends AbstractEntity implements AggregateRoot {
-	@ElementCollection(fetch=FetchType.EAGER)
-	private Set<Long> bookIds = new HashSet<>();
-	@Transient
-	private Set<Book> books = new HashSet<>();
-	
 	@Column(nullable=false)
-	private String owner;
+	private String name;
 	
-	public Bookshelf(String owner) {
+	@Convert(converter=AggregateProxy.class)
+	@Column(columnDefinition="TEXT")
+	private AggregateProxy<Book> booksAggregate = new AggregateProxy<>(AggregateRelationType.ONE_TO_MANY);
+	
+	public Bookshelf(String name) {
 		super();
-		this.owner = owner;
-	}
-	
-	public void addBookId(Long id) {
-		bookIds.add(id);
-	}
-	
-	public void removeBookId(Long id) {
-		bookIds.remove(id);
+		this.name = name;
 	}
 }
