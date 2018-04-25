@@ -1,11 +1,13 @@
 package com.sk.cnaps.samples.selfstudy.bookshelf.application.sp.web;
 
+import static com.google.common.collect.Lists.*;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.junit.After;
 import org.junit.Before;
@@ -89,15 +91,15 @@ public class BookshelfRestControllerTests {
 		authorRepository.save(new Author("찰스 다윈"));
 		authorRepository.save(new Author("정성권", "klimtver@gmail.com", ""));
 
-		//System.out.println(">>>>> authorRepository " + authorRepository.findAll());
+        logger.info(">>>>> authorRepository " + authorRepository.findAll());
 
 		bookRepository.save(new Book("연암산문선", "", VersionType.ORIGINAL));
 		bookRepository.save(new Book("신기관", "", VersionType.ORIGINAL));
 		bookRepository.save(new Book("토마스 쿤", "", VersionType.ORIGINAL));
 		bookRepository.save(new Book("마이크로서비스 아키텍처 구축", "대용량 시스템의 효율적인 분산 설계 기법", VersionType.TRANSLATION));
 
-		ArrayList<Author> authors = Lists.newArrayList(authorRepository.findAll());
-		ArrayList<Book> books = Lists.newArrayList(bookRepository.findAll());
+		ArrayList<Author> authors = newArrayList(authorRepository.findAll());
+		ArrayList<Book> books = newArrayList(bookRepository.findAll());
 		
 		books.get(0).getAuthorsAggregate().add(authors.get(0).getId());
 		books.get(1).getAuthorsAggregate().add(authors.get(1).getId());
@@ -105,8 +107,7 @@ public class BookshelfRestControllerTests {
 		books.get(3).getAuthorsAggregate().add(authors.get(3).getId());
 
 		testAuthorId = authors.get(0).getId();
-		//System.out.println(">>>>> testAuthorId " + testAuthorId);
-				
+
 		bookRepository.save(books);
 		
 		Bookshelf bookshelf = new Bookshelf("My bookshelf");
@@ -114,13 +115,17 @@ public class BookshelfRestControllerTests {
 		bookshelf.getBooksAggregate().add(books.get(1).getId());
 		bookshelf.getBooksAggregate().add(books.get(3).getId());
 
-		//testBookshelfId = books.get(0).getId();
-		testBookshelfId = 2L;
-		//System.out.println(">>>>> testBookshelfId " + testBookshelfId);
-
 		bookshelfRepository.save(bookshelf);
 
-		//System.out.println(">>>>> bookshelfRepository " + bookshelfRepository.findAll());
+        ArrayList<Bookshelf> bookshelves = newArrayList(bookshelfRepository.findAll());
+        testBookshelfId = bookshelves.get(bookshelves.size() - 1).getId();
+
+        System.out.println("**************** bookshelves " + bookshelves.toString());
+        System.out.println("**************** testBookshelfId " + testBookshelfId);
+        System.out.println("**************** bookshelves.size() " + bookshelves.size());
+        for (int i = 0; i < bookshelves.size(); i++) {
+            System.out.println(" ^ "+ bookshelves.get(i));
+        }
 	}
 	
 	@Test
@@ -131,6 +136,8 @@ public class BookshelfRestControllerTests {
 		Long authorId = testAuthorId.longValue();
 
 		Book book = service.findBookWithAuthorsById(authorId);
+
+        logger.info(">>>>> book " + book.toString());
 		
 		mockMvc.perform(get("/v1/bookshelf-service/books:withAuthors/" + authorId))
 		       .andExpect(status().isOk())
@@ -148,8 +155,8 @@ public class BookshelfRestControllerTests {
 		Long bookshelfId = testBookshelfId.longValue();
 
 		Bookshelf bookshelf = service.findBookshelfWithBooksById(bookshelfId);
-		
-		System.out.println(">>>>> bookshelf " + bookshelf.toString());
+
+        logger.info(">>>>> bookshelf " + bookshelf.toString());
 
 		mockMvc.perform(get("/v1/bookshelf-service/bookshelves:withBooks/" + bookshelfId))
 	           .andExpect(status().isNotFound());
