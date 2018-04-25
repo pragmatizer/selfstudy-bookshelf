@@ -9,13 +9,24 @@ import java.util.ArrayList;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -30,29 +41,46 @@ import com.sk.cnaps.samples.selfstudy.bookshelf.domain.repository.BookRepository
 import com.sk.cnaps.samples.selfstudy.bookshelf.domain.repository.BookshelfRepository;
 import com.sk.cnaps.samples.selfstudy.bookshelf.domain.service.BookshelfService;
 
-//@RunWith(SpringRunner.class)
-//@SpringBootTest
-//@AutoConfigureMockMvc
+import javax.transaction.Transactional;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 public class BookshelfRestControllerTests {
+	//
+	Logger logger = LoggerFactory.getLogger(getClass());
+
+	// Console Color
+	private static final String RESET		= "\u001B[0m";	// Text Reset
+	private static final String RED			= "\u001B[31m";	// Red
+	private static final String BLUE		= "\u001B[34m";	// Blue
+	private static final String PURPLE		= "\u001B[35m";	// Purple
+
+	@Rule
+	public TestName testName = new TestName();
+
 	@Autowired
 	private MockMvc mockMvc;
-	
+
 	@Autowired
 	private BookshelfRestController controller;
-	
+
 	@Autowired
 	private BookshelfService service;
-	
+
 	@Autowired
 	private AuthorRepository authorRepository;
-	
+
 	@Autowired
 	private BookRepository bookRepository;
-	
+
 	@Autowired
 	private BookshelfRepository bookshelfRepository;
 
-	//@Before
+	private Long testAuthorId = 0L;
+	private Long testBookshelfId = 0L;
+
+	@Before
 	public void setUp() throws Exception {
 		mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 
@@ -60,6 +88,8 @@ public class BookshelfRestControllerTests {
 		authorRepository.save(new Author("프란시스 베이컨"));
 		authorRepository.save(new Author("찰스 다윈"));
 		authorRepository.save(new Author("정성권", "klimtver@gmail.com", ""));
+
+		//System.out.println(">>>>> authorRepository " + authorRepository.findAll());
 
 		bookRepository.save(new Book("연암산문선", "", VersionType.ORIGINAL));
 		bookRepository.save(new Book("신기관", "", VersionType.ORIGINAL));
@@ -73,6 +103,9 @@ public class BookshelfRestControllerTests {
 		books.get(1).getAuthorsAggregate().add(authors.get(1).getId());
 		books.get(2).getAuthorsAggregate().add(authors.get(2).getId());
 		books.get(3).getAuthorsAggregate().add(authors.get(3).getId());
+
+		testAuthorId = authors.get(0).getId();
+		//System.out.println(">>>>> testAuthorId " + testAuthorId);
 				
 		bookRepository.save(books);
 		
@@ -80,33 +113,53 @@ public class BookshelfRestControllerTests {
 		bookshelf.getBooksAggregate().add(books.get(0).getId());
 		bookshelf.getBooksAggregate().add(books.get(1).getId());
 		bookshelf.getBooksAggregate().add(books.get(3).getId());
-		
+
+		//testBookshelfId = books.get(0).getId();
+		testBookshelfId = 2L;
+		//System.out.println(">>>>> testBookshelfId " + testBookshelfId);
+
 		bookshelfRepository.save(bookshelf);
+
+		//System.out.println(">>>>> bookshelfRepository " + bookshelfRepository.findAll());
 	}
 	
-	//@Test
+	@Test
 	public void testFindBookWithAuthorsById() throws Exception {
-		Long authorId = 1L;
-			
+		//
+		logger.info(BLUE + "---------- " + testName.getMethodName() + "() 메소드 starting ----------" + RESET);
+
+		Long authorId = testAuthorId.longValue();
+
 		Book book = service.findBookWithAuthorsById(authorId);
 		
 		mockMvc.perform(get("/v1/bookshelf-service/books:withAuthors/" + authorId))
 		       .andExpect(status().isOk())
 		       .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 		       .andExpect(content().string(equalTo(JsonUtil.toJsonStr(book))));
+
+		logger.info(BLUE + "---------- " + testName.getMethodName() + "() 메소드 end ----------" + RESET);
 	}
 
-	//@Test
+	@Test
 	public void testFindBookshelfWithBooksById() throws Exception {
-		Long bookshelfId = 2L;
-		
+		//
+		logger.info(BLUE + "---------- " + testName.getMethodName() + "() 메소드 starting ----------" + RESET);
+
+		Long bookshelfId = testBookshelfId.longValue();
+
 		Bookshelf bookshelf = service.findBookshelfWithBooksById(bookshelfId);
 		
-		System.out.println("*********************************************************************");
-		System.out.println(bookshelf.toString());
-	
+		System.out.println(">>>>> bookshelf " + bookshelf.toString());
+
 		mockMvc.perform(get("/v1/bookshelf-service/bookshelves:withBooks/" + bookshelfId))
 	           .andExpect(status().isNotFound());
+
+		logger.info(BLUE + "---------- " + testName.getMethodName() + "() 메소드 end ----------" + RESET);
+	}
+
+	@After
+	public void tearDown() throws Exception {
+		//
 	}
 
 }

@@ -34,6 +34,8 @@ import com.sk.cnaps.samples.selfstudy.bookshelf.domain.repository.AuthorReposito
 import com.sk.cnaps.samples.selfstudy.bookshelf.domain.repository.BookRepository;
 import com.sk.cnaps.samples.selfstudy.bookshelf.domain.repository.BookshelfRepository;
 
+import javax.transaction.Transactional;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class BookshelfSerivceTests {
@@ -102,10 +104,6 @@ public class BookshelfSerivceTests {
 	@Before
 	public void init() throws Exception {
 		//
-		authorRepository.deleteAll();
-		bookRepository.deleteAll();
-		bookshelfRepository.deleteAll();
-
 		authorRepository.save(new Author("박지원"));
 		authorRepository.save(new Author("프란시스 베이컨"));
 		authorRepository.save(new Author("찰스 다윈"));
@@ -166,10 +164,6 @@ public class BookshelfSerivceTests {
 		logger.info(PURPLE + "Service 조회 데이터와 Repository 저장 데이터는 같다" + RESET);
 		assertThat(booksFromSvc, equalTo(bookMapFromDB));
 
-		authorRepository.deleteAll();
-		bookRepository.deleteAll();
-		bookshelfRepository.deleteAll();
-
 		logger.info(BLUE + "---------- " + testName.getMethodName() + "() 메소드 end ----------" + RESET);
 	}
 
@@ -184,6 +178,9 @@ public class BookshelfSerivceTests {
 	@After
 	public void tearDown() throws Exception {
 		//
+		authorRepository.deleteAll();
+		bookRepository.deleteAll();
+		bookshelfRepository.deleteAll();
 	}
 
 	/**

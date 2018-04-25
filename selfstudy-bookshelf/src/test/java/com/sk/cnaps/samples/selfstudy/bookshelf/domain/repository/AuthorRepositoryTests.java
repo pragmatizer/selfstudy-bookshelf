@@ -2,17 +2,22 @@ package com.sk.cnaps.samples.selfstudy.bookshelf.domain.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.junit.After;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.sk.cnaps.samples.selfstudy.bookshelf.domain.model.Author;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
-//@RunWith(SpringRunner.class)
-//@SpringBootTest
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class AuthorRepositoryTests {
 	@Autowired
 	private AuthorRepository repository;
 	
-	//@Test
+	@Test
 	public void test() {
 		
 		repository.save(new Author("박지원"));
@@ -24,5 +29,11 @@ public class AuthorRepositoryTests {
 		Iterable<Author> authors = repository.findAll();
 		
 		assertThat(authors).isNotEmpty().hasSize(4);
+	}
+
+	@After
+	public void tearDown() throws Exception {
+		//
+		repository.deleteAll();
 	}
 }

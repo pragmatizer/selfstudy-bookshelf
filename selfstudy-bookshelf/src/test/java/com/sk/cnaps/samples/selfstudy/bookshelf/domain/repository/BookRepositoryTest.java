@@ -2,6 +2,7 @@ package com.sk.cnaps.samples.selfstudy.bookshelf.domain.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,12 @@ public class BookRepositoryTest {
 		Iterable<Book> books = repository.findAll();
 		
 		assertThat(books).isNotEmpty().hasSize(4);
+	}
+
+	@After
+	public void tearDown() throws Exception {
+		//
+		repository.deleteAll();
 	}
 
 }
